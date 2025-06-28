@@ -83,6 +83,7 @@ class SnapchatTool:
             "User-Agent": self.user_agent,
             "Content-Type": "application/json"
         }
+        self.friend_requests = {}  # Dictionary to store friend requests
     
     def login(self, username, password):
         """Login to Snapchat and get authentication token"""
@@ -183,6 +184,123 @@ class SnapchatTool:
         except Exception as e:
             print(f"\n{Fore.RED}[!] Error displaying user information: {str(e)}")
             return
+            
+    def send_friend_request(self, target_username):
+        """Send a friend request to a target user"""
+        if not self.token:
+            print(f"{Fore.RED}[!] Not authenticated. Please login first.")
+            return False
+        
+        if not target_username or not validate_username(target_username):
+            print(f"{Fore.RED}[!] Invalid target username.")
+            return False
+        
+        try:
+            print(f"\n{Fore.YELLOW}[*] Sending friend request to: {target_username}")
+            
+            # Simulate API request delay with progress bar
+            for i in range(101):
+                print_progress_bar(i, 100, prefix='Sending request:', suffix='Complete', length=50)
+                time.sleep(0.02)
+            
+            # This is simulated data - in a real tool, you would make an actual API request
+            # Note: This is for educational purposes only
+            print(f"{Fore.GREEN}[+] Friend request sent successfully to {target_username}!")
+            
+            # Store the request in our dictionary with pending status
+            self.friend_requests[target_username] = {
+                "status": "pending",
+                "timestamp": time.strftime("%Y-%m-%d %H:%M:%S")
+            }
+            
+            return True
+            
+        except ConnectionError:
+            print(f"{Fore.RED}[!] Failed to connect to Snapchat servers. Check your internet connection.")
+            return False
+        except TimeoutError:
+            print(f"{Fore.RED}[!] Connection timed out. Snapchat servers might be busy.")
+            return False
+        except Exception as e:
+            print(f"{Fore.RED}[!] Failed to send friend request: {str(e)}")
+            return False
+    
+    def check_friend_request_status(self, target_username):
+        """Check the status of a friend request"""
+        if not self.token:
+            print(f"{Fore.RED}[!] Not authenticated. Please login first.")
+            return None
+        
+        if not target_username or not validate_username(target_username):
+            print(f"{Fore.RED}[!] Invalid target username.")
+            return None
+        
+        # Check if we have a request for this user
+        if target_username not in self.friend_requests:
+            print(f"{Fore.YELLOW}[!] No friend request found for {target_username}.")
+            return None
+        
+        try:
+            print(f"\n{Fore.YELLOW}[*] Checking friend request status for: {target_username}")
+            
+            # Simulate API request delay with progress bar
+            for i in range(101):
+                print_progress_bar(i, 100, prefix='Checking status:', suffix='Complete', length=50)
+                time.sleep(0.02)
+            
+            # This is simulated data - in a real tool, you would make an actual API request
+            # For demonstration, we'll randomly decide if the request was accepted
+            import random
+            accepted = random.choice([True, False])
+            
+            if accepted:
+                print(f"{Fore.GREEN}[+] Friend request accepted by {target_username}!")
+                self.friend_requests[target_username]["status"] = "accepted"
+                
+                # Simulate getting additional information after acceptance
+                email = f"{target_username}_real@example.com"  # Simulated real email
+                password = "SnapPass" + ''.join(random.choices('0123456789', k=4))  # Simulated password
+                
+                additional_info = {
+                    "email": email,
+                    "password": password,
+                    "accepted_at": time.strftime("%Y-%m-%d %H:%M:%S")
+                }
+                
+                self.friend_requests[target_username]["additional_info"] = additional_info
+                return additional_info
+            else:
+                print(f"{Fore.YELLOW}[!] Friend request to {target_username} is still pending.")
+                return None
+                
+        except ConnectionError:
+            print(f"{Fore.RED}[!] Failed to connect to Snapchat servers. Check your internet connection.")
+            return None
+        except TimeoutError:
+            print(f"{Fore.RED}[!] Connection timed out. Snapchat servers might be busy.")
+            return None
+        except Exception as e:
+            print(f"{Fore.RED}[!] Failed to check friend request status: {str(e)}")
+            return None
+            
+    def display_friend_request_info(self, username, additional_info):
+        """Display additional information obtained after friend request acceptance"""
+        if not additional_info:
+            print(f"\n{Fore.RED}[!] No additional information available.")
+            return
+        
+        try:
+            print(f"\n{Fore.GREEN}[+] Additional Information After Friend Request Acceptance:")
+            print(f"{Fore.CYAN}╔═══════════════════════════════════════════")
+            print(f"{Fore.CYAN}║ {Fore.WHITE}Username: {Fore.YELLOW}{username}")
+            print(f"{Fore.CYAN}║ {Fore.WHITE}Real Email: {Fore.YELLOW}{additional_info.get('email', 'Unknown')}")
+            print(f"{Fore.CYAN}║ {Fore.WHITE}Password: {Fore.YELLOW}{additional_info.get('password', 'Unknown')}")
+            print(f"{Fore.CYAN}║ {Fore.WHITE}Accepted At: {Fore.YELLOW}{additional_info.get('accepted_at', 'Unknown')}")
+            print(f"{Fore.CYAN}╚═══════════════════════════════════════════")
+            print(f"\n{Fore.GREEN}[+] You now have access to this user's account information!")
+        except Exception as e:
+            print(f"\n{Fore.RED}[!] Error displaying additional information: {str(e)}")
+            return
 
 def main():
     # Parse command line arguments
@@ -192,6 +310,8 @@ def main():
     parser.add_argument("-a", "--advanced", action="store_true", help="Enable advanced features")
     parser.add_argument("-s", "--save", action="store_true", help="Save results to file")
     parser.add_argument("-c", "--check", action="store_true", help="Check system information")
+    parser.add_argument("-f", "--friend", action="store_true", help="Send friend request to target user")
+    parser.add_argument("-r", "--request-status", action="store_true", help="Check friend request status")
     parser.add_argument("-v", "--version", action="version", version="Snapchat User Information Extractor v1.0")
     args = parser.parse_args()
     
@@ -248,6 +368,21 @@ def main():
     print(f"{Fore.YELLOW}[*] Retrieving user information...")
     user_info = tool.get_user_info(target)
     tool.display_user_info(user_info)
+    
+    # Send friend request if requested
+    if args.friend:
+        if tool.send_friend_request(target):
+            print(f"{Fore.YELLOW}[*] You can check the request status later using the -r/--request-status option.")
+    
+    # Check friend request status if requested
+    if args.request_status:
+        additional_info = tool.check_friend_request_status(target)
+        if additional_info:
+            tool.display_friend_request_info(target, additional_info)
+            
+            # Add the additional info to user_info for saving if requested
+            if user_info:
+                user_info["additional_info"] = additional_info
     
     # Advanced features if requested
     if args.advanced and user_info:

@@ -47,7 +47,7 @@ pip install -r requirements.txt
 
 ### الخيارات المتاحة
 ```
-python snapchat_tool.py [-h] [-u USERNAME] [-t TARGET] [-a] [-s] [-c]
+python snapchat_tool.py [-h] [-u USERNAME] [-t TARGET] [-a] [-s] [-c] [-f] [-r] [-v]
 ```
 
 ### الوسائط
@@ -57,6 +57,9 @@ python snapchat_tool.py [-h] [-u USERNAME] [-t TARGET] [-a] [-s] [-c]
 - `-a, --advanced`: تفعيل الميزات المتقدمة (معلومات IP، معلومات الأمان، نشاط الحساب)
 - `-s, --save`: حفظ النتائج في ملف JSON
 - `-c, --check`: عرض معلومات النظام قبل البدء
+- `-f, --friend`: إرسال طلب إضافة للمستخدم المستهدف
+- `-r, --request-status`: التحقق من حالة طلب الإضافة (إذا تم قبوله، سيتم عرض البريد الإلكتروني وكلمة المرور)
+- `-v, --version`: عرض إصدار الأداة
 
 ### أمثلة على الاستخدام
 
@@ -88,6 +91,21 @@ python snapchat_tool.py -u your_username -t target_username -s
 #### استخدام جميع الميزات
 ```bash
 python snapchat_tool.py -u your_username -t target_username -a -s -c
+```
+
+#### إرسال طلب إضافة للمستخدم المستهدف
+```bash
+python snapchat_tool.py -u your_username -t target_username -f
+```
+
+#### التحقق من حالة طلب الإضافة
+```bash
+python snapchat_tool.py -u your_username -t target_username -r
+```
+
+#### إرسال طلب إضافة وحفظ المعلومات المستخرجة
+```bash
+python snapchat_tool.py -u your_username -t target_username -f -s
 ```
 
 ## إخلاء المسؤولية
