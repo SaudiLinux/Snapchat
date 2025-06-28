@@ -205,6 +205,98 @@ class AdvancedFeatures:
         except Exception as e:
             print(f"\n{Fore.RED}[!] Error displaying activity information: {str(e)}")
             return
+            
+    def track_active_location(self, username):
+        """Track the active location of a target user"""
+        try:
+            print(f"\n{Fore.YELLOW}[*] Tracking active location for user: {username}")
+            
+            # Simulate API request delay
+            time.sleep(2)
+            
+            # This is simulated data - in a real tool, you would make an actual API request
+            # Note: This is for educational purposes only
+            active_locations = [
+                {
+                    "device": "iPhone 12 Pro",
+                    "app_version": "10.88.0.69",
+                    "last_active": time.strftime("%Y-%m-%d %H:%M:%S"),
+                    "location": {
+                        "city": "Dubai",
+                        "country": "UAE",
+                        "latitude": "25.2048",
+                        "longitude": "55.2708",
+                        "accuracy": "15m"
+                    },
+                    "connection_type": "WiFi",
+                    "battery_level": "78%",
+                    "is_charging": True
+                },
+                {
+                    "device": "MacBook Pro",
+                    "app_version": "Web 2.4.5",
+                    "last_active": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time() - 3600)),  # 1 hour ago
+                    "location": {
+                        "city": "Dubai",
+                        "country": "UAE",
+                        "latitude": "25.2048",
+                        "longitude": "55.2708",
+                        "accuracy": "50m"
+                    },
+                    "connection_type": "WiFi",
+                    "is_charging": False
+                }
+            ]
+            
+            return active_locations
+            
+        except Exception as e:
+            print(f"{Fore.RED}[!] Failed to track active location: {str(e)}")
+            return None
+    
+    def display_active_location(self, active_locations):
+        """Display active location information in a formatted way"""
+        if not active_locations:
+            print(f"\n{Fore.RED}[!] No active location information available.")
+            return
+        
+        try:
+            print(f"\n{Fore.GREEN}[+] Active Location Tracking Information:")
+            print(f"{Fore.CYAN}╔═══════════════════════════════════════════")
+            
+            for i, device_data in enumerate(active_locations, 1):
+                device = device_data.get('device', 'Unknown Device')
+                app_version = device_data.get('app_version', 'Unknown')
+                last_active = device_data.get('last_active', 'Unknown')
+                connection = device_data.get('connection_type', 'Unknown')
+                battery = device_data.get('battery_level', 'Unknown')
+                charging = "Yes" if device_data.get('is_charging', False) else "No"
+                
+                location = device_data.get('location', {})
+                city = location.get('city', 'Unknown')
+                country = location.get('country', 'Unknown')
+                latitude = location.get('latitude', 'Unknown')
+                longitude = location.get('longitude', 'Unknown')
+                accuracy = location.get('accuracy', 'Unknown')
+                
+                print(f"{Fore.CYAN}║ {Fore.WHITE}Device {i}: {Fore.YELLOW}{device} ({app_version})")
+                print(f"{Fore.CYAN}║ {Fore.WHITE}Last Active: {Fore.YELLOW}{last_active}")
+                print(f"{Fore.CYAN}║ {Fore.WHITE}Location: {Fore.YELLOW}{city}, {country}")
+                print(f"{Fore.CYAN}║ {Fore.WHITE}Coordinates: {Fore.YELLOW}{latitude}, {longitude} (±{accuracy})")
+                print(f"{Fore.CYAN}║ {Fore.WHITE}Connection: {Fore.YELLOW}{connection}")
+                
+                if battery:
+                    print(f"{Fore.CYAN}║ {Fore.WHITE}Battery: {Fore.YELLOW}{battery} (Charging: {charging})")
+                
+                if i < len(active_locations):
+                    print(f"{Fore.CYAN}║ {Fore.WHITE}---")
+            
+            print(f"{Fore.CYAN}║ {Fore.WHITE}Map Link: {Fore.YELLOW}https://www.google.com/maps?q={latitude},{longitude}")
+            print(f"{Fore.CYAN}╚═══════════════════════════════════════════")
+            print(f"\n{Fore.GREEN}[+] You can copy the Map Link to view the location in Google Maps.")
+        except Exception as e:
+            print(f"\n{Fore.RED}[!] Error displaying active location information: {str(e)}")
+            return
     
     def export_data_to_json(self, data, filename="snapchat_data.json"):
         """Export data to a JSON file"""

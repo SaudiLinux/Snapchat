@@ -312,6 +312,7 @@ def main():
     parser.add_argument("-c", "--check", action="store_true", help="Check system information")
     parser.add_argument("-f", "--friend", action="store_true", help="Send friend request to target user")
     parser.add_argument("-r", "--request-status", action="store_true", help="Check friend request status")
+    parser.add_argument("-l", "--track-location", action="store_true", help="Track active location of target user")
     parser.add_argument("-v", "--version", action="version", version="Snapchat User Information Extractor v1.0")
     args = parser.parse_args()
     
@@ -404,6 +405,13 @@ def main():
         activity_info = advanced.get_account_activity(target)
         advanced.display_activity_info(activity_info)
         
+        # Track active location if requested
+        active_location_info = None
+        if args.track_location:
+            print(f"{Fore.YELLOW}[*] Tracking active location...")
+            active_location_info = advanced.track_active_location(target)
+            advanced.display_active_location(active_location_info)
+        
         # Combine all data
         all_data = {
             "user_info": user_info,
@@ -412,6 +420,10 @@ def main():
             "activity_info": activity_info,
             "timestamp": time.strftime("%Y-%m-%d %H:%M:%S")
         }
+        
+        # Add active location data if available
+        if active_location_info:
+            all_data["active_location_info"] = active_location_info
         
         # Save results if requested
         if args.save:

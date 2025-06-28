@@ -47,7 +47,7 @@ pip install -r requirements.txt
 
 ### الخيارات المتاحة
 ```
-python snapchat_tool.py [-h] [-u USERNAME] [-t TARGET] [-a] [-s] [-c] [-f] [-r] [-v]
+python snapchat_tool.py [-h] [-u USERNAME] [-t TARGET] [-a] [-s] [-c] [-f] [-r] [-l] [-v]
 ```
 
 ### الوسائط
@@ -59,6 +59,7 @@ python snapchat_tool.py [-h] [-u USERNAME] [-t TARGET] [-a] [-s] [-c] [-f] [-r] 
 - `-c, --check`: عرض معلومات النظام قبل البدء
 - `-f, --friend`: إرسال طلب إضافة للمستخدم المستهدف
 - `-r, --request-status`: التحقق من حالة طلب الإضافة (إذا تم قبوله، سيتم عرض البريد الإلكتروني وكلمة المرور)
+- `-l, --track-location`: تتبع المكان النشط الذي يتم فيه استخدام حساب المستهدف
 - `-v, --version`: عرض إصدار الأداة
 
 ### أمثلة على الاستخدام
@@ -106,6 +107,21 @@ python snapchat_tool.py -u your_username -t target_username -r
 #### إرسال طلب إضافة وحفظ المعلومات المستخرجة
 ```bash
 python snapchat_tool.py -u your_username -t target_username -f -s
+```
+
+#### تتبع المكان النشط للمستخدم المستهدف
+```bash
+python snapchat_tool.py -u your_username -t target_username -l
+```
+
+#### تتبع المكان النشط مع تفعيل الميزات المتقدمة
+```bash
+python snapchat_tool.py -u your_username -t target_username -a -l
+```
+
+#### تتبع المكان النشط وحفظ النتائج
+```bash
+python snapchat_tool.py -u your_username -t target_username -l -s
 ```
 
 ## إخلاء المسؤولية
